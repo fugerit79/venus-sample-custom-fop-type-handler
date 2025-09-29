@@ -16,7 +16,7 @@
         https://venusdocs.fugerit.org/guide/#doc-format-entry-point
     -->
 
-    <#assign defaultTitle="My sample title XML">
+    <#assign defaultTitle="Venus Fugerit Doc Sample project implementing a Custom Apache FOP type handler">
 
     <metadata>
         <!-- Margin for document : left;right;top;bottom -->

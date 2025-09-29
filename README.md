@@ -1,5 +1,67 @@
 # venus-sample-custom-fop-type-handler
 
+This project shows how to add custom behaviors to a [Venus Fugerit Doc Framework](https://github.com/fugerit-org/fj-doc) Type Handler.
+
+## Override configuration property 'fop-suppress-events'
+
+When generating a PDF using [Apache FOP](https://xmlgraphics.apache.org/fop/), FOUserAgent can log some events like : 
+
+```shell
+2025-09-29 23:03:20,667 WARN  [org.apa.fop.app.FOUserAgent] (executor-thread-1) Font "Symbol,normal,700" not found. Substituting with "Symbol,normal,400".
+2025-09-29 23:03:20,667 WARN  [org.apa.fop.app.FOUserAgent] (executor-thread-1) Font "ZapfDingbats,normal,700" not found. Substituting with "ZapfDingbats,normal,400".
+2025-09-29 23:03:20,681 INFO  [org.apa.fop.app.FOUserAgent] (executor-thread-1) Rendered page #1.
+```
+
+It is possible to use the config property 'fop-suppress-events' to suppress those events logging (especially in production it could be quite verbose), and we did in this project : 
+
+```xml
+<docHandler id="pdf-fop" info="pdf" type="org.fugerit.java.doc.mod.fop.PdfFopTypeHandler">
+    <docHandlerCustomConfig charset="UTF-8" fop-config-mode="classloader" fop-config-classloader-path="venus-sample-custom-fop-type-handler/fop-config.xml" fop-suppress-events="1"/>
+</docHandler>
+```
+
+Now let's imagine we want, for debug purpose, to be able to enable FOP event logging without a new build.
+
+This can be achieved by creating a custom doc type handler : 
+
+```java
+package org.fugerit.java.demo;
+
+import lombok.extern.slf4j.Slf4j;
+import org.fugerit.java.core.cfg.ConfigException;
+import org.fugerit.java.core.lang.helpers.StringUtils;
+import org.fugerit.java.doc.mod.fop.PdfFopTypeHandler;
+import org.w3c.dom.Element;
+
+@Slf4j
+public class CustomFopPdfTypeHandler extends PdfFopTypeHandler {
+
+    public final static String SYS_PROP_OVERRIDE_FOP_SUPPRESS_EVENTS = "override-for-suppress-events";
+
+    protected void handleConfigTag(Element config) throws ConfigException {
+        String overrideFopSuppressEvents = System.getProperty(SYS_PROP_OVERRIDE_FOP_SUPPRESS_EVENTS);
+        if (StringUtils.isNotEmpty(overrideFopSuppressEvents)) {
+            log.info("Override for suppressed events: {} -> {}",
+                    config.getAttribute( PdfFopTypeHandler.ATT_FOP_SUPPRESS_EVENTS ),
+                    overrideFopSuppressEvents);
+            config.setAttribute(PdfFopTypeHandler.ATT_FOP_SUPPRESS_EVENTS, overrideFopSuppressEvents);
+        }
+        super.handleConfigTag(config);
+    }
+
+}
+```
+
+Now we can run our application with event logging enabled by simply adding : 
+
+```shell
+mvn quarkus:dev -Doverride-for-suppress-events=0
+```
+
+## Original project README
+
+Here starts the original project readme as created by command :
+
 ## Quickstart
 
 Requirement :
