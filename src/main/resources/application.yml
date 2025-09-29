@@ -1,0 +1,8 @@
+greeting:
+  message: "hello"
+
+quarkus:
+  native:
+    # if needed add -H:+UnlockExperimentalVMOptions
+    additional-build-args: -H:IncludeResources=venus-sample-custom-fop-type-handler/fm-doc-process-config.xml,\
+      -H:IncludeResources=venus-sample-custom-fop-type-handler/template/document.ftl
