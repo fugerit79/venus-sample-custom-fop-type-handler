@@ -8,6 +8,9 @@ This project shows how to add custom behaviors to a [Venus Fugerit Doc Framework
 [![License: MIT](https://img.shields.io/badge/License-MIT-teal.svg)](https://opensource.org/licenses/MIT)
 [![code of conduct](https://img.shields.io/badge/conduct-Contributor%20Covenant-purple.svg)](https://github.com/fugerit-org/fj-universe/blob/main/CODE_OF_CONDUCT.md)
 
+This project is part of a series of mini tutorial on [Venus Fugerit Doc](https://github.com/fugerit-org/fj-doc),
+here you can find the [other tutorials](https://github.com/fugerit79/venus-sample-index).
+
 ## Override configuration property 'fop-suppress-events'
 
 When generating a PDF using [Apache FOP](https://xmlgraphics.apache.org/fop/), FOUserAgent can log some events like : 
