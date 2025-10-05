@@ -4,9 +4,7 @@ import jakarta.ws.rs.GET;
 import jakarta.ws.rs.Path;
 import jakarta.ws.rs.Produces;
 import jakarta.ws.rs.WebApplicationException;
-import jakarta.ws.rs.core.MediaType;
 import jakarta.enterprise.context.ApplicationScoped;
-import jakarta.inject.Inject;
 import lombok.extern.slf4j.Slf4j;
 import org.fugerit.java.doc.base.config.DocConfig;
 import org.fugerit.java.doc.base.process.DocProcessContext;
@@ -18,15 +16,18 @@ import java.util.List;
 import org.eclipse.microprofile.openapi.annotations.Operation;
 import org.eclipse.microprofile.openapi.annotations.responses.APIResponse;
 import org.eclipse.microprofile.openapi.annotations.tags.Tag;
-import org.eclipse.microprofile.openapi.annotations.tags.Tags;
 
 @Slf4j
 @ApplicationScoped
 @Path("/doc")
 public class DocResource {
 
-    @Inject
+    public DocResource(DocHelper docHelper) {
+        this.docHelper = docHelper;
+    }
+
     DocHelper docHelper;
+
     byte[] processDocument(String handlerId) {
         try (ByteArrayOutputStream baos = new ByteArrayOutputStream()) {
 
